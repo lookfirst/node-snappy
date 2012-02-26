@@ -121,11 +121,11 @@ typedef string DataEndingAtUnreadablePage;
 #endif
 
 enum CompressorType {
-  ZLIB, LZO, LIBLZF, QUICKLZ, FASTLZ, SNAPPY,
+  ZLIB, LZO, LIBLZF, QUICKLZ, FASTLZ, SNAPPY
 };
 
 const char* names[] = {
-  "ZLIB", "LZO", "LIBLZF", "QUICKLZ", "FASTLZ", "SNAPPY",
+  "ZLIB", "LZO", "LIBLZF", "QUICKLZ", "FASTLZ", "SNAPPY"
 };
 
 static size_t MinimumRequiredOutputSpace(size_t input_size,
@@ -300,7 +300,7 @@ static bool Uncompress(const string& compressed, CompressorType comp,
           reinterpret_cast<const Bytef*>(compressed.data()),
           compressed.size());
       CHECK_EQ(Z_OK, ret);
-      CHECK_EQ(destlen, size);
+      CHECK_EQ(static_cast<uLongf>(size), destlen);
       break;
     }
 #endif  // ZLIB_VERSION
@@ -316,7 +316,7 @@ static bool Uncompress(const string& compressed, CompressorType comp,
           &destlen,
           NULL);
       CHECK_EQ(LZO_E_OK, ret);
-      CHECK_EQ(destlen, size);
+      CHECK_EQ(static_cast<lzo_uint>(size), destlen);
       break;
     }
 #endif  // LZO_VERSION
@@ -591,21 +591,23 @@ TYPED_TEST(CorruptedTest, VerifyCorrupted) {
     // Another security check; check a crazy big length can't DoS us with an
     // over-allocation.
     // Currently this is done only for 32-bit builds.  On 64-bit builds,
-    // where 3GBytes might be an acceptable allocation size, Uncompress()
+    // where 3 GB might be an acceptable allocation size, Uncompress()
     // attempts to decompress, and sometimes causes the test to run out of
     // memory.
     dest[0] = dest[1] = dest[2] = dest[3] = 0xff;
-    // This decodes to a really large size, i.e., 3221225471 bytes
+    // This decodes to a really large size, i.e., about 3 GB.
     dest[4] = 'k';
-    CHECK(!IsValidCompressedBuffer(TypeParam(dest)));
-    CHECK(!Uncompress(TypeParam(dest), &uncmp));
-    dest[0] = dest[1] = dest[2] = 0xff;
-    dest[3] = 0x7f;
     CHECK(!IsValidCompressedBuffer(TypeParam(dest)));
     CHECK(!Uncompress(TypeParam(dest), &uncmp));
   } else {
     LOG(WARNING) << "Crazy decompression lengths not checked on 64-bit build";
   }
+
+  // This decodes to about 2 MB; much smaller, but should still fail.
+  dest[0] = dest[1] = dest[2] = 0xff;
+  dest[3] = 0x00;
+  CHECK(!IsValidCompressedBuffer(TypeParam(dest)));
+  CHECK(!Uncompress(TypeParam(dest), &uncmp));
 
   // try reading stuff in from a bad file.
   for (int i = 1; i <= 3; ++i) {
@@ -742,11 +744,11 @@ TEST(Snappy, FourByteOffset) {
   // it chops up the input into 32KB pieces.  So we hand-emit the
   // copy manually.
 
-  // The two fragments that make up the input string
+  // The two fragments that make up the input string.
   string fragment1 = "012345689abcdefghijklmnopqrstuvwxyz";
   string fragment2 = "some other string";
 
-  // How many times is each fragment emittedn
+  // How many times each fragment is emitted.
   const int n1 = 2;
   const int n2 = 100000 / fragment2.size();
   const int length = n1 * fragment1.size() + n2 * fragment2.size();
