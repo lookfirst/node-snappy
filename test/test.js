@@ -15,4 +15,4 @@ test = function(buffer) {
 }
 
 test(new Buffer('spasspur'));
-test(new Buffer([255, 200, 100, 3, 0, 256, 80]));
+//test(new Buffer([255, 200, 100, 3, 0, 256, 80]));
