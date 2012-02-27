@@ -1,12 +1,12 @@
 {
-  "author": "David Björklund <david.bjorklund@gmail.com>",
+  "author": "Karl Skomski <karl@skomski.com>",
   "name": "snappy",
-  "description": "Nodejs bindings to Google's Snappy compression library",
-  "version": "1.2.0",
-  "homepage": "https://github.com/kesla/node-snappy",
+  "description": "Node.js bindings to Google's Snappy compression library",
+  "version": "1.0.0",
+  "homepage": "https://github.com/skomski/node-snappy",
   "repository": {
     "type": "git",
-    "url": "git://github.com/kesla/node-snappy.git"
+    "url": "git://github.com/skomski/node-snappy.git"
   },
   "main": "lib/snappy.js",
   "directories": {
