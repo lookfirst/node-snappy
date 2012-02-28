@@ -34,7 +34,7 @@ Snappy.compress(buffer, function(err, compressed){
 ### decompress(buffer, cb)
   * Required:
     * `buffer` - Compressed buffer
-    * `cb` - Function with two arguments `(err, uncompressedBuffer)`
+    * `cb` - Function with two arguments `(err, decompressedBuffer)`
 
 ## License
 
