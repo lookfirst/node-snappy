@@ -10,7 +10,7 @@ Node.js bindings for Google's fast compressor/decompressor: <http://code.google.
 npm install snappy
 ```
 
-## Benchmark
+## Simple Benchmark
 
 ```
 Testfile:
