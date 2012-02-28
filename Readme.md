@@ -24,6 +24,18 @@ Snappy.compress(buffer, function(err, compressed){
 });
 ```
 
+## Methods
+
+### compress(buffer, cb)
+  * Required:
+    * `buffer` - Decompressed buffer
+    * `cb` - Function with two arguments `(err, compressedBuffer)`
+
+### decompress(buffer, cb)
+  * Required:
+    * `buffer` - Compressed buffer
+    * `cb` - Function with two arguments `(err, uncompressedBuffer)`
+
 ## License
 
 Licensed under the MIT license.
