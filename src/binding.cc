@@ -41,8 +41,9 @@ namespace v8 {
     if (try_catch.HasCaught()) node::FatalException(try_catch);
 
     req->callback.Dispose();
-    delete job;
+    delete[] req->output_data;
     delete req;
+    delete job;
   }
 
   Handle<Value> compress(const Arguments& args) {
@@ -73,7 +74,7 @@ namespace v8 {
       return;
     }
 
-    req->output_data = new char[req->output_length-1];
+    req->output_data = new char[req->output_length];
 
     if (!snappy::RawUncompress(
           req->input_data,
@@ -106,6 +107,7 @@ namespace v8 {
     if (try_catch.HasCaught()) node::FatalException(try_catch);
 
     req->callback.Dispose();
+    delete[] req->output_data;
     delete req;
     delete job;
   }

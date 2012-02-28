@@ -1,4 +1,4 @@
-var Snappy = require('../lib/snappy');
+var Snappy = require('..');
 var Assert = require('assert');
 var Fs     = require('fs');
 
@@ -24,7 +24,7 @@ test(new Buffer(JSON.stringify({
   errorMessage: 'The specified bucket does not exist.',
   uuid: '2231231283129938219383912'
 })));
-test(Fs.readFileSync(__dirname + '/urls.10K'))
+test(Fs.readFileSync(__dirname + '/urls.10K'));
 
 process.on('exit', function() {
   Assert.equal(tests, 4);
