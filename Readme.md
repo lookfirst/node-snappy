@@ -1,4 +1,6 @@
-# snappy [![Build Status](https://secure.travis-ci.org/Skomski/node-snappy.png?branch=master)](http://travis-ci.org/Skomski/node-snappy)
+This is a fork of kesla's node-snappy. Simple async binding and no more :)
+
+# node-snappy [![Build Status](https://secure.travis-ci.org/Skomski/node-snappy.png?branch=master)](http://travis-ci.org/Skomski/node-snappy)
 
 Node.js bindings for Google's fast compressor/decompressor: <http://code.google.com/p/snappy/>
 
@@ -23,6 +25,18 @@ Snappy.compress(buffer, function(err, compressed){
   });
 });
 ```
+
+## Methods
+
+### compress(buffer, cb)
+  * Required:
+    * `buffer` - Decompressed buffer
+    * `cb` - Function with two arguments `(err, compressedBuffer)`
+
+### decompress(buffer, cb)
+  * Required:
+    * `buffer` - Compressed buffer
+    * `cb` - Function with two arguments `(err, decompressedBuffer)`
 
 ## License
 
