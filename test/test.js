@@ -15,4 +15,10 @@ test = function(buffer) {
 }
 
 test(new Buffer('spasspur'));
-//test(new Buffer([255, 200, 100, 3, 0, 256, 80]));
+test(new Buffer([255, 200, 100, 3, 0, 256, 80]));
+test(new Buffer(JSON.stringify({
+  status: 500,
+  errorName: 'NoSuchBucket',
+  errorMessage: 'The specified bucket does not exist.',
+  uuid: '2231231283129938219383912'
+})));
