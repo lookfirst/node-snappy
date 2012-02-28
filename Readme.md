@@ -1,4 +1,4 @@
-# node-snappy [![Build Status](https://secure.travis-ci.org/skomski/node-snappy.png)](http://travis-ci.org/skomski/node-snappy)
+# node-snappy [![Build Status](https://secure.travis-ci.org/Skomski/node-snappy.png?branch=master)](http://travis-ci.org/Skomski/node-snappy)
 
 ## About
 
