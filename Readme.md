@@ -1,9 +1,29 @@
-# node-snappy [![Build Status](https://secure.travis-ci.org/Skomski/node-snappy.png?branch=master)](http://travis-ci.org/Skomski/node-snappy)
+# snappy [![Build Status](https://secure.travis-ci.org/Skomski/node-snappy.png?branch=master)](http://travis-ci.org/Skomski/node-snappy)
 
-## About
+Node.js bindings for Google's fast compressor/decompressor: <http://code.google.com/p/snappy/>
 
-Node bindings for Google's fast compressor/decompressor: <http://code.google.com/p/snappy/>
+## Install
 
-# License
+```
+npm install snappy
+```
 
-MIT
+## Usage
+
+```javascript
+
+var Snappy = require('snappy');
+var buffer = new Buffer([255, 200, 100, 3, 0, 256, 80]);
+
+Snappy.compress(buffer, function(err, compressed){
+  if (err) throw err;
+
+  Snappy.decompress(compressed, function(err, decompressed){
+    if (err) throw err;
+  });
+});
+```
+
+## License
+
+Licensed under the MIT license.
