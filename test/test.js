@@ -1,15 +1,17 @@
 var Snappy = require('../lib/snappy');
 var Assert = require('assert');
+var Fs     = require('fs');
+
+tests = 0;
 
 test = function(buffer) {
-  console.log('test: ' + buffer);
-
   Snappy.compress(buffer, function(err, compressed){
     Assert.ifError(err);
 
     Snappy.decompress(compressed, function(err, decompressed){
       Assert.ifError(err);
       Assert.equal(decompressed.toString(), buffer.toString());
+      tests++
     });
   });
 }
@@ -22,3 +24,8 @@ test(new Buffer(JSON.stringify({
   errorMessage: 'The specified bucket does not exist.',
   uuid: '2231231283129938219383912'
 })));
+test(Fs.readFileSync(__dirname + '/urls.10K'))
+
+process.on('exit', function() {
+  Assert.equal(tests, 4);
+});
