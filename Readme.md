@@ -10,6 +10,21 @@ Node.js bindings for Google's fast compressor/decompressor: <http://code.google.
 npm install snappy
 ```
 
+## Benchmark
+
+```
+File:
+https://raw.github.com/Skomski/node-snappy/master/test/urls.10K
+
+Compression:
+snappy: 357267 bytes
+zlib(level:1): 253263 bytes
+
+Speed:
+zlib x 68.30 ops/sec ±1.52% (56 runs sampled)
+snappy x 361 ops/sec ±0.94% (61 runs sampled)
+```
+
 ## Usage
 
 ```javascript
