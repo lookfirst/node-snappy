@@ -8,7 +8,8 @@ var suite = new Benchmark.Suite;
 var buffer = Fs.readFileSync(__dirname + '/../test/urls.10K');
 
 var FastDeflate = Zlib.createDeflate({
-  level: 1
+  level: 1,
+  memLevel: 9
 });
 
 var deflateLength = 0;
@@ -32,7 +33,9 @@ suite.add('zlib', function(deferred) {
   var result = new Buffer(253263);
   var position = 0;
   var FastDeflate = Zlib.createDeflate({
-    level: 1
+    level: 1,
+    memLevel: 8,
+    chunkSize: 253263
   });
   FastDeflate.on('data', function(chunk) {
     chunk.copy(result, position);

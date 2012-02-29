@@ -18,6 +18,7 @@ test = function(buffer) {
 
 test(new Buffer('spasspur'));
 test(new Buffer([255, 200, 100, 3, 0, 256, 80]));
+test(new Buffer('काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥'));
 test(new Buffer(JSON.stringify({
   status: 500,
   errorName: 'NoSuchBucket',
@@ -27,5 +28,5 @@ test(new Buffer(JSON.stringify({
 test(Fs.readFileSync(__dirname + '/urls.10K'));
 
 process.on('exit', function() {
-  Assert.equal(tests, 4);
+  Assert.equal(tests, 5);
 });
