@@ -31,7 +31,7 @@ Speed:
 ```javascript
 
 var Snappy = require('snappy');
-var buffer = new Buffer([255, 200, 100, 3, 0, 256, 80]);
+var buffer = new Buffer('yyyyyyyyyyyyyyyyyyy');
 
 Snappy.compress(buffer, function(err, compressed){
   if (err) throw err;
