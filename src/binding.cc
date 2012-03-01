@@ -91,7 +91,7 @@ namespace v8 {
 
     Handle<Value> argv[2];
 
-    if (req->output_length != -1) {
+    if (req->output_length != -1u) {
       argv[0] = Local<Value>::New(Null());
       argv[1] = node::Buffer::New(
           req->output_data,
