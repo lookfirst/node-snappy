@@ -9,7 +9,7 @@ var buffer = Fs.readFileSync(__dirname + '/../test/urls.10K');
 
 var FastDeflate = Zlib.createDeflate({
   level: 1,
-  memLevel: 9
+  memLevel: 8
 });
 
 var deflateLength = 0;
@@ -46,13 +46,13 @@ suite.add('zlib', function(deferred) {
   });
   FastDeflate.write(buffer);
   FastDeflate.end();
-}, { defer: true });
+}, { defer: true, minSamples: 2000 });
 
 suite.add('snappy', function(deferred) {
   Snappy.compress(buffer, function(err, result) {
     deferred.resolve();
   });
-},{ defer: true });
+},{ defer: true, minSamples: 2000 });
 
 suite.on('cycle', function(event, bench) {
   console.log(String(bench));
@@ -60,4 +60,4 @@ suite.on('cycle', function(event, bench) {
 .on('complete', function() {
   console.log('Fastest is ' + this.filter('fastest').pluck('name'));
 })
-.run({ 'async': false });
+.run({ async: false });
