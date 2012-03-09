@@ -2,7 +2,7 @@
   "author": "Karl Skomski <karl@skomski.com>",
   "name": "snappy",
   "description": "Node.js bindings to Google's Snappy compression library",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "homepage": "https://github.com/skomski/node-snappy",
   "repository": {
     "type": "git",
