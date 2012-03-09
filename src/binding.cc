@@ -3,14 +3,14 @@
 #include <snappy.h>
 #include <node_buffer.h>
 
-namespace v8 {
+namespace nodesnappy {
 
   struct request {
     const char* input_data;
     size_t input_length;
     char* output_data;
     size_t output_length;
-    Persistent<Function> callback;
+    v8::Persistent<v8::Function> callback;
   };
 
   void compress_work(uv_work_t *job) {
@@ -28,16 +28,18 @@ namespace v8 {
   }
 
   void compress_done(uv_work_t *job) {
-    HandleScope scope;
+    v8::HandleScope scope;
 
     request *req = static_cast<request*>(job->data);
 
-    Handle<Object> buffer = node::Buffer::New(
+    v8::Handle<v8::Object> buffer = node::Buffer::New(
       req->output_data, req->output_length)->handle_;
 
-    Handle<Value> argv[2] = { Local<Value>::New(Null()), buffer };
-    TryCatch try_catch;
-    req->callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    v8::Handle<v8::Value> argv[2] = {
+      v8::Local<v8::Value>::New(v8::Null()), buffer };
+
+    v8::TryCatch try_catch;
+    req->callback->Call(v8::Context::GetCurrent()->Global(), 2, argv);
     if (try_catch.HasCaught()) node::FatalException(try_catch);
 
     req->callback.Dispose();
@@ -46,21 +48,22 @@ namespace v8 {
     delete job;
   }
 
-  Handle<Value> compress(const Arguments& args) {
-    HandleScope scope;
+  v8::Handle<v8::Value> compress(const v8::Arguments& args) {
+    v8::HandleScope scope;
 
     request *req = new request;
 
-    Local<Object> input = args[0]->ToObject();
+    v8::Local<v8::Object> input = args[0]->ToObject();
     req->input_length = node::Buffer::Length(input);
     req->input_data = node::Buffer::Data(input);
-    req->callback = Persistent<Function>::New(Local<Function>::Cast(args[1]));
+    req->callback = v8::Persistent<v8::Function>::New(
+      v8::Local<v8::Function>::Cast(args[1]));
 
     uv_work_t *job = new uv_work_t;
     job->data = req;
     uv_queue_work(uv_default_loop(), job, compress_work, compress_done);
 
-    return scope.Close(Undefined());
+    return scope.Close(v8::Undefined());
   }
 
   void uncompress_work(uv_work_t *job) {
@@ -70,7 +73,7 @@ namespace v8 {
           req->input_data,
           req->input_length,
           &req->output_length)) {
-      req->output_length = -1;
+      req->output_length = -1u;
       return;
     }
 
@@ -80,30 +83,30 @@ namespace v8 {
           req->input_data,
           req->input_length,
           req->output_data)) {
-      req->output_length = -1;
+      req->output_length = -1u;
     }
   }
 
   void uncompress_done(uv_work_t *job) {
-    HandleScope scope;
+    v8::HandleScope scope;
 
     request* req = static_cast<request*>(job->data);
 
-    Handle<Value> argv[2];
+    v8::Handle<v8::Value> argv[2];
 
     if (req->output_length != -1u) {
-      argv[0] = Local<Value>::New(Null());
+      argv[0] = v8::Local<v8::Value>::New(v8::Null());
       argv[1] = node::Buffer::New(
           req->output_data,
           req->output_length)->handle_;
     } else {
-      argv[0] = Exception::Error(
-        String::New("Buffer could not be decompressed"));
-      argv[1] = Local<Value>::New(Null());
+      argv[0] = v8::Exception::Error(
+        v8::String::New("Buffer could not be decompressed"));
+      argv[1] = v8::Local<v8::Value>::New(v8::Null());
     }
 
-    TryCatch try_catch;
-    req->callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    v8::TryCatch try_catch;
+    req->callback->Call(v8::Context::GetCurrent()->Global(), 2, argv);
     if (try_catch.HasCaught()) node::FatalException(try_catch);
 
     req->callback.Dispose();
@@ -112,16 +115,17 @@ namespace v8 {
     delete job;
   }
 
-  Handle<Value> uncompress(const Arguments& args) {
-    HandleScope scope;
+  v8::Handle<v8::Value> uncompress(const v8::Arguments& args) {
+    v8::HandleScope scope;
 
     request *req = new request;
 
-    Local<Object> input = args[0]->ToObject();
+    v8::Local<v8::Object> input = args[0]->ToObject();
 
     req->input_length = node::Buffer::Length(input);
     req->input_data = node::Buffer::Data(input);
-    req->callback = Persistent<Function>::New(Local<Function>::Cast(args[1]));
+    req->callback = v8::Persistent<v8::Function>::New(
+      v8::Local<v8::Function>::Cast(args[1]));
 
     uv_work_t *uncompressJob = new uv_work_t;
     uncompressJob->data = req;
@@ -131,14 +135,14 @@ namespace v8 {
       uncompress_work,
       uncompress_done);
 
-    return scope.Close(Undefined());
+    return scope.Close(v8::Undefined());
   }
 
-  void Init(Handle<Object> target) {
-    target->Set(String::NewSymbol("compress"),
-      FunctionTemplate::New(compress)->GetFunction());
-    target->Set(String::NewSymbol("uncompress"),
-      FunctionTemplate::New(uncompress)->GetFunction());
+  void Init(v8::Handle<v8::Object> target) {
+    target->Set(v8::String::NewSymbol("compress"),
+      v8::FunctionTemplate::New(compress)->GetFunction());
+    target->Set(v8::String::NewSymbol("uncompress"),
+      v8::FunctionTemplate::New(uncompress)->GetFunction());
   }
 
   NODE_MODULE(binding, Init)
