@@ -8,8 +8,6 @@ test = function(buffer) {
   Snappy.compress(buffer, function(err, compressed){
     Assert.ifError(err);
 
-    process.stdout.write(compressed.toString())
-
     Snappy.decompress(compressed, function(err, decompressed){
       Assert.ifError(err);
       Assert.equal(decompressed.toString(), buffer.toString());
