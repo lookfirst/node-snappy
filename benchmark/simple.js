@@ -46,13 +46,14 @@ suite.add('zlib', function(deferred) {
   });
   FastDeflate.write(buffer);
   FastDeflate.end();
-}, { defer: true, minSamples: 2000 });
+}, { defer: true, minSamples: 2000, maxTime: 30 });
 
 suite.add('snappy', function(deferred) {
   Snappy.compress(buffer, function(err, result) {
+    if (err) throw err;
     deferred.resolve();
   });
-},{ defer: true, minSamples: 2000 });
+},{ defer: true, minSamples: 2000, maxTime: 30 });
 
 suite.on('cycle', function(event, bench) {
   console.log(String(bench));
